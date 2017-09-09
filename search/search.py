@@ -92,12 +92,39 @@ def depthFirstSearch(problem):
 
     print "Start:", problem.getStartState()
     #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    print "Next's successors:", problem.getSuccessors((5,4))
+    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    #print "Next's successors:", problem.getSuccessors((5,4))
     #print problem
 
     "*** YOUR CODE HERE ***"
-    "***util.raiseNotDefined()***"
+    #Implementing the non-recursive DFS algorithm. this algorithm uses a stack instead of a Queue.
+    #The stack will be of the class from util.py
+
+    myStack = util.Stack()
+    visitedArray =[]
+    path=[]
+    initialState=problem.getStartState()
+
+    #DFS
+    myStack.push(initialState)
+    while not myStack.isEmpty():
+        v=myStack.pop()
+        path.append(v)
+        if not visitedArray.__contains__(v[0]):
+            visitedArray.append(v[0])
+            successors=problem.getSuccessors(v)
+            #print successors
+            for x in successors:
+                myStack.push(x[0])
+                #print x
+
+
+    print path
+
+
+
+
+
     return [w,w,w,w,s,n,s,n,s,s,n,n,s,s,n,n,s,n,s,n,e,w,e,w,e,w,e,w,e,e,e,e,e,e,e]
 
 
