@@ -70,9 +70,16 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
+
     return  [s, s, w, s, w, w, s, w]
+    """return [w,w,w,w,s,n,s,n,s,s,n,n,s,s,n,n,s,n,s,n,e,w,e,w,e,w,e,w,e,e,e,e,e,e,e]"""
 
 def depthFirstSearch(problem):
+    from game import Directions
+    s = Directions.SOUTH
+    w = Directions.WEST
+    e = Directions.EAST
+    n = Directions.NORTH
     """
     Search the deepest nodes in the search tree first.
 
@@ -80,14 +87,19 @@ def depthFirstSearch(problem):
     goal. Make sure to implement a graph search algorithm.
 
     To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
+    understand the search problem that is being passed in:"""
+
 
     print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    """
+    print "Next's successors:", problem.getSuccessors((5,4))
+    #print problem
+
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    "***util.raiseNotDefined()***"
+    return [w,w,w,w,s,n,s,n,s,s,n,n,s,s,n,n,s,n,s,n,e,w,e,w,e,w,e,w,e,e,e,e,e,e,e]
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
