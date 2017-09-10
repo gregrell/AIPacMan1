@@ -100,32 +100,78 @@ def depthFirstSearch(problem):
     #Implementing the non-recursive DFS algorithm. this algorithm uses a stack instead of a Queue.
     #The stack will be of the class from util.py
 
-    myStack = util.Stack()
-    visitedArray =[]
-    path=[]
-    initialState=problem.getStartState()
+
 
     #DFS
-    myStack.push(initialState)
-    while not myStack.isEmpty():
-        v=myStack.pop()
-        path.append(v)
+    discovered=[]
+    def DFS(p,v,fringe):
+        discovered.append(v[0])
+        temp_fringe=[]
+        temp_fringe.append(fringe)
+        temp_fringe.append(v[1])
+        successors=p.getSuccessors(v[0])
+        for w in successors:
+            if not discovered.__contains__(w[0]):
+                if p.isGoalState(w[0]):
+                    print "goal state found", w
+                    print "temp fringe",temp_fringe
+                    return temp_fringe
+                DFS(p,w,temp_fringe)
+
+
+    initialSuccessor=problem.getSuccessors(problem.getStartState())
+    fringe=[]
+    path=DFS(problem,initialSuccessor[0],fringe)
+    #print discovered
+    print path
+    print fringe
+
+
+
+
+
+
+    """
+    stateStack = util.Stack()
+    visitedArray =[]
+    initialState=((problem.getStartState()),'null',0)
+    path=[]
+    stateStack.push(initialState)
+    while not stateStack.isEmpty():
+        v=stateStack.pop()
         if not visitedArray.__contains__(v[0]):
             visitedArray.append(v[0])
-            successors=problem.getSuccessors(v)
-            #print successors
+            print visitedArray
+            successors=problem.getSuccessors(v[0])
             for x in successors:
-                myStack.push(x[0])
-                #print x
+                stateStack.push(x)
+    """
+
+    #print path
+
+    directions=[]
+    """
+    for x in path:
+        if x[1][0]=='E':
+            directions.append(e)
+        if x[1][0]=='W':
+            directions.append(w)
+        if x[1][0]=='N':
+            directions.append(n)
+        if x[1][0]=='S':
+            directions.append(s)"""
 
 
-    print path
+
+
+
+    print directions
 
 
 
 
+    return directions
 
-    return [w,w,w,w,s,n,s,n,s,s,n,n,s,s,n,n,s,n,s,n,e,w,e,w,e,w,e,w,e,e,e,e,e,e,e]
 
 
 def breadthFirstSearch(problem):
