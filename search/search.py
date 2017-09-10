@@ -120,11 +120,6 @@ def depthFirstSearch(problem):
     #print problem
 
     "*** YOUR CODE HERE ***"
-    #Implementing the non-recursive DFS algorithm. this algorithm uses a stack instead of a Queue.
-    #The stack will be of the class from util.py
-
-
-
     #DFS
     #Uses class Node from above. Depth First Seach algorithm - when goal is found it is appended to a nodebin list. The path is re-constructed from the goal back
     #through all parent nodes to the origin.
