@@ -106,25 +106,25 @@ def depthFirstSearch(problem):
     discovered=[]
     def DFS(p,v,fringe):
         discovered.append(v[0])
-        temp_fringe=[]
-        temp_fringe.append(fringe)
-        temp_fringe.append(v[1])
+        fringe.append(v[1])
         successors=p.getSuccessors(v[0])
         for w in successors:
             if not discovered.__contains__(w[0]):
+
                 if p.isGoalState(w[0]):
                     print "goal state found", w
-                    print "temp fringe",temp_fringe
-                    return temp_fringe
-                DFS(p,w,temp_fringe)
+                    print "temp fringe",fringe
+                    return fringe
+                DFS(p,w,fringe)
 
 
-    initialSuccessor=problem.getSuccessors(problem.getStartState())
+    startState=((problem.getStartState()),'x',1)
     fringe=[]
-    path=DFS(problem,initialSuccessor[0],fringe)
+    path=DFS(problem,startState,fringe)
+
     #print discovered
-    print path
-    print fringe
+    print "path", path
+    print "fringe",fringe
 
 
 
