@@ -181,6 +181,8 @@ def breadthFirstSearch(problem):
     n = Directions.NORTH
     start=Node(problem.getStartState(),None,['Begin'])
 
+    #I implemented the non-recursive BFS algorithm that uses a set and a queue.
+
     def BFS(p,root):
         S=[]
         Q=util.Queue()
@@ -196,6 +198,8 @@ def breadthFirstSearch(problem):
                     Q.push(Node(x[0],current,x[1]))
 
     target=BFS(problem,start)
+
+    #Target has been acquired, now reconstruct the path from the target back to the root
     node=target
     path = []
     while not node == None:
@@ -203,6 +207,7 @@ def breadthFirstSearch(problem):
         node = node.getParent()
     path.reverse()
 
+    #change the path into something the calling routine will actually be able to use
     directions = []
     for x in path:
         if x == 'East':
