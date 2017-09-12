@@ -174,7 +174,55 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from game import Directions
+    s = Directions.SOUTH
+    w = Directions.WEST
+    e = Directions.EAST
+    n = Directions.NORTH
+    start=Node(problem.getStartState(),None,['Begin'])
+
+    def BFS(p,root):
+        S=[]
+        Q=util.Queue()
+        S.append(root.getState())
+        Q.push(root)
+        while not Q.isEmpty():
+            current=Q.pop()
+            if p.isGoalState(current.getState()):
+                return current
+            for x in p.getSuccessors(current.getState()):
+                if not S.__contains__(x[0]):
+                    S.append(x[0])
+                    Q.push(Node(x[0],current,x[1]))
+
+    target=BFS(problem,start)
+    node=target
+    path = []
+    while not node == None:
+        path.append(node.getPath())
+        node = node.getParent()
+    path.reverse()
+
+    directions = []
+    for x in path:
+        if x == 'East':
+            directions.append(e)
+        if x == 'West':
+            directions.append(w)
+        if x == 'North':
+            directions.append(n)
+        if x == 'South':
+            directions.append(s)
+
+    print "directions given from this algorithm ", directions
+
+    return directions
+
+
+
+
+
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
