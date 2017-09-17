@@ -307,7 +307,15 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from game import Directions
+    s = Directions.SOUTH
+    w = Directions.WEST
+    e = Directions.EAST
+    n = Directions.NORTH
+    start = Node(problem.getStartState(), None, ['Begin'], 0)
+    print "the heuristic is ", heuristic.func_name
+    return [n]
+
 
 
 # Abbreviations
