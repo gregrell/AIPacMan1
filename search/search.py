@@ -81,6 +81,8 @@ class Node:
         self.parent=parent
         self.path=path
         self.cost=cost
+        self.f=None
+        self.h=None
 
 
     def setState(self,x):
@@ -110,10 +112,28 @@ class Node:
         node=self
         path = []
         while not node == None:
-            path.append(node.getPath())
-            node = node.getParent()
+            try:
+                path.append(node.getPath())
+                node = node.getParent()
+            except AttributeError:
+                print "path generation exception"
+                break
         path.reverse()
         return path
+
+    def setF(self,f):
+        self.f=f
+    def getF(self):
+        if not self.h==None:
+            return self.h+self.cost
+        else:
+            return self.f
+    def setH(self,h):
+        self.h=h
+    def getH(self):
+        return self.h
+
+
 
 
 
@@ -258,7 +278,7 @@ def uniformCostSearch(problem):
     w = Directions.WEST
     e = Directions.EAST
     n = Directions.NORTH
-    start = Node(problem.getStartState(), None, ['Begin'],0)
+    start = Node(problem.getStartState(), 0, ['Begin'],0)
 
     #Uniform cost search algorithm implemented as in https://www.ics.uci.edu/~rickl/courses/cs-171/cs171-lecture-slides/cs-171-03-UninformedSearch.pdf
     #Priority Queue used from util.py
@@ -307,14 +327,94 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    #Modelled with reference to http://web.mit.edu/eranki/www/tutorials/search/
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
     e = Directions.EAST
     n = Directions.NORTH
-    start = Node(problem.getStartState(), None, ['Begin'], 0)
-    print "the heuristic is ", heuristic.func_name
-    return [n]
+    start = Node(problem.getStartState(), 0, 'Begin', 0)
+
+
+
+
+    closedSet=[]
+    openSet=[]
+    start.setF(0)
+    openSet.append(start)
+    iteration=0
+    goalN=None
+    found=False
+
+
+
+    while len(openSet)>0 and found==False:
+        iteration+=1
+
+        leastVal=float("inf")
+        q=None
+        for x in openSet:
+            if x.getF()<leastVal:
+                q=x
+        theQ=q
+        openSet.remove(q)
+
+        successors=problem.getSuccessors(theQ.getState())
+        sNodes=[]
+        for y in successors:
+            tmpNode=Node(y[0],theQ,y[1],theQ.getCost()+y[2])
+            tmpNode.setH(heuristic(tmpNode.getState(),problem))
+            sNodes.append(tmpNode)
+
+        for z in sNodes:
+            flagged=False
+            if problem.isGoalState(z.getState()):
+                print "found goal state", z.getState()
+                goalN=z
+                found=True
+
+            for other in openSet:
+                if other.getState()==z.getState():
+                    #print "matched other in open set ",other.getState()," at cost ",other.getF(),"with Z ",z.getState()," at cost ",z.getF()
+                    if other.getF()<z.getF():
+                        #openSet.append(z)
+                        flagged=True
+
+            for other in closedSet:
+                if other.getState()==z.getState():
+                    #print "matched other in closed set ",other.getState()," at cost ",other.getF(),"with Z ",z.getState()," at cost ",z.getF()
+
+                    if other.getF()<z.getF():
+                        #openSet.append(z)
+                        flagged=True
+
+            if  flagged==False:
+                openSet.append(z)
+        #print "open Set Length: ",len(openSet), "closed Set Length: ", len(closedSet)
+        closedSet.append(theQ)
+
+
+
+
+
+    directions = []
+    for x in goalN.getTotalPath():
+        if x == 'East':
+            directions.append(e)
+        if x == 'West':
+            directions.append(w)
+        if x == 'North':
+            directions.append(n)
+        if x == 'South':
+            directions.append(s)
+
+    return directions
+
+
+
+
+
+
 
 
 
