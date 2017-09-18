@@ -105,8 +105,12 @@ class Node:
         node=self
         total=0
         while not node == None:
-            total=total+self.getCost()
-            node=node.getParent()
+            try:
+                total=total+self.getCost()
+                node=node.getParent()
+            except AttributeError:
+                #print "get total cost exception"
+                break
         return total
     def getTotalPath(self):
         node=self
@@ -116,7 +120,7 @@ class Node:
                 path.append(node.getPath())
                 node = node.getParent()
             except AttributeError:
-                print "path generation exception"
+                #print "path generation exception"
                 break
         path.reverse()
         return path
