@@ -187,6 +187,7 @@ def depthFirstSearch(problem):
             return
         else:
             successors=p.getSuccessors(v.getState())
+            successors=reversed(successors)
             for s in successors:
                 t=Node(s[0],v,[],0)
                 t.appendPath(s[1])
@@ -216,7 +217,7 @@ def depthFirstSearch(problem):
         if x[0]=='South':
             directions.append(s)
 
-    print "directions given from this algorithm ",directions
+    print "directions given from this algorithm ",directions.__sizeof__()
 
     return directions
 
@@ -288,7 +289,7 @@ def uniformCostSearch(problem):
     #Priority Queue used from util.py
 
     def UCS(p,start):
-        Q=util.PriorityQueue()
+        Q=util.PriorityQueue() #Use of priority queue
         explored=[]
         Q.push(start,start.getCost())
         while not Q.isEmpty():
@@ -301,11 +302,10 @@ def uniformCostSearch(problem):
                 child=Node(x[0],node,x[1],x[2])
                 if not explored.__contains__(child.getState()):
                     Q.push(child,child.getTotalCost())
-                    print "Pushed ",child.getState()," with cost ",child.getTotalCost()
 
     goal=UCS(problem,start)
 
-    print "goal found at ",goal.getState(),"total cost ",goal.getTotalCost()," and path ",goal.getTotalPath()
+    #print "goal found at ",goal.getState(),"total cost ",goal.getTotalCost()," and path ",goal.getTotalPath()
 
     directions = []
     for x in goal.getTotalPath():
