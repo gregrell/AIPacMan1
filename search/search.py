@@ -245,7 +245,7 @@ def breadthFirstSearch(problem):
             if p.isGoalState(current.getState()):
                 return current
             for x in p.getSuccessors(current.getState()):
-                if not S.__contains__(x[0]):
+                if x[0] not in S:
                     S.append(x[0])
                     Q.push(Node(x[0],current,x[1],0))
 
