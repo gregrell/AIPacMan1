@@ -83,6 +83,8 @@ class Node:
         self.cost=cost
         self.f=None
         self.h=None
+        self.remainingGoals=None
+
 
 
     def setState(self,x):
@@ -136,6 +138,15 @@ class Node:
         self.h=h
     def getH(self):
         return self.h
+    def getRemainingGoals(self):
+        return self.remainingGoals
+    def setRemainingGoals(self,newGoals):
+        self.remainingGoals=newGoals
+    def removeGoal(self,goal):
+        self.remainingGoals.remove(goal)
+    def getFirstGoal(self):
+        return self.remainingGoals[0]
+
 
 
 
