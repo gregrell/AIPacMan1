@@ -265,18 +265,23 @@ def breadthFirstSearch(problem):
         Q.push(root)
         while not Q.isEmpty():
             current=Q.pop()
+            path=current.getPath()
             if p.isGoalState(current.getState()):
                 return current
             for x in p.getSuccessors(current.getState()):
                 if x[0] not in S:
+                    TmpPath=path[:]
+                    TmpPath.append(x[1])
                     S.append(x[0])
-                    Q.push(Node(x[0],current,x[1],0))
+                    Q.push(Node(x[0],current,TmpPath,0))
 
     target=BFS(problem,start)
 
+    print "the path of target ",target.getPath()
+
     #change the path into something the calling routine will actually be able to use
     directions = []
-    for x in target.getTotalPath():
+    for x in target.getPath():
         if x == 'East':
             directions.append(e)
         if x == 'West':
