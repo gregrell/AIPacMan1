@@ -95,7 +95,6 @@ class Node:
         self.cost=cost
         self.f=None
         self.h=None
-        self.remainingGoals=None
 
 
 
@@ -150,14 +149,7 @@ class Node:
         self.h=h
     def getH(self):
         return self.h
-    def getRemainingGoals(self):
-        return self.remainingGoals
-    def setRemainingGoals(self,newGoals):
-        self.remainingGoals=newGoals
-    def removeGoal(self,goal):
-        self.remainingGoals.remove(goal)
-    def getFirstGoal(self):
-        return self.remainingGoals[0]
+
 
 
 
@@ -199,50 +191,50 @@ def depthFirstSearch(problem):
     #through all parent nodes to the origin.
 
     start=Node(problem.getStartState(),None,['Begin'],0)
-    discovered=[]
-    nodebin=[]
 
     #Recursive DFS implemented
-    def DFS(p,v):
-        discovered.append(v.getState())
-        if p.isGoalState(v.getState()):
-            nodebin.append(v)
-            return
-        else:
-            successors=p.getSuccessors(v.getState())
-            successors=reversed(successors)
-            for s in successors:
-                t=Node(s[0],v,[],0)
-                t.appendPath(s[1])
-                if not discovered.__contains__(t.getState()):
-                    DFS(p,t)
+    def DFS(p,root):
+        S = []
+        Q = util.Stack()
+        S.append(root.getState())
+        Q.push(root)
+        while not Q.isEmpty():
+            current = Q.pop()
+            S.append(current.getState())
 
-    #initial DFS call
-    DFS(problem,start)
+            #print "popped node was ", current.getState()
+            path = current.getPath()
+            if p.isGoalState(current.getState()):
+                #print "goal state popped ", current.getState(), " its parent is ", current.getParent().getState()
+                return current
+            successors=p.getSuccessors(current.getState())
+            #successors=list(reversed(successors))
+            #print "the successors are ", successors
 
-    #because the algorithm is complete the goal will have been found. Reconstruct path from goal to origin
-    node=nodebin[0]
-    path=[]
-    while not node==None:
-        path.append(node.getPath())
-        node=node.getParent()
-    path.reverse()
+            #print "the reversed successors are ", successors
 
-    #Take path and generate directions for return of algorithm to calling routine
-    directions = []
-    for x in path:
-        if x[0]=='East':
-            directions.append(e)
-        if x[0]=='West':
-            directions.append(w)
-        if x[0]=='North':
-            directions.append(n)
-        if x[0]=='South':
-            directions.append(s)
 
-    print "directions given from this algorithm ",directions.__sizeof__()
+            for x in successors:
+                if x[0] not in S:
+                    TmpPath = path[:]
+                    TmpPath.append(x[1])
+                    TmpNode = Node(x[0], current, TmpPath, 0)
+                    #print "pushing onto stack ",TmpNode.getState()
+                    Q.push(TmpNode)
 
-    return directions
+    node=DFS(problem,start)
+
+
+
+    path=node.getPath()
+
+    #path.reverse()
+
+
+
+
+    #print "the path is", path
+    return path[1:]
 
 
 
@@ -291,7 +283,7 @@ def breadthFirstSearch(problem):
         if x == 'South':
             directions.append(s)
 
-    print "directions given from this algorithm ", directions
+    #print "directions given from this algorithm ", directions
 
 
 

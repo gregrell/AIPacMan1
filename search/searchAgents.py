@@ -169,6 +169,7 @@ class PositionSearchProblem(search.SearchProblem):
 
     def isGoalState(self, state):
         isGoal = state == self.goal
+        #print 'Goal Check is ', self.goal
 
         # For display purposes only
         if isGoal and self.visualize:
