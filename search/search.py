@@ -80,6 +80,10 @@ class State:
         self.coords=coords
         self.remainingGoals=remainingGoals
 
+    def __str__(self):
+        returnString=self.coords," ",self.remainingGoals
+        return str(returnString)
+
     def getRemainingGoals(self):
         return self.remainingGoals
     def getCoords(self):
@@ -282,7 +286,7 @@ def breadthFirstSearch(problem):
 
             successors=p.getSuccessors(current.getState())
             successors=list(reversed(successors))
-            #print "the successors are ", successors
+            #print "the successors to ",current.getState()," are ", successors
 
             #print "the reversed successors are ", successors
             for x in successors:
@@ -290,7 +294,7 @@ def breadthFirstSearch(problem):
                     TmpPath = path[:]
                     TmpPath.append(x[1])
                     TmpNode = Node(x[0], current, TmpPath, 0)
-                    #print "pushing onto queue ",TmpNode.getState(), "when the discovered is ",S
+                    #print "pushing onto queue ",TmpNode.getState()
                     S.append(TmpNode.getState())
                     Q.push(TmpNode)
 

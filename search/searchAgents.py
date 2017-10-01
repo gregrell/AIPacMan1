@@ -40,6 +40,7 @@ from game import Actions
 import util
 import time
 import search
+import copy
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -305,7 +306,7 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        print "checking state", state[0]," ",state[1]
+        #print "checking state", state[0]," ",state[1]
         return len(state[1])==0
         #util.raiseNotDefined()
 
@@ -333,9 +334,12 @@ class CornersProblem(search.SearchProblem):
             if not hitsWall:
                 nextState = (nextx, nexty)
                 #cost = self.costFn(nextState)
-                remaining=state[1]
+                remaining=copy.copy(state[1])
                 if nextState in remaining:
                     remaining.remove(nextState)
+                #print "state 0 is ", state[0]
+                #define new state object
+                #NewState=search.State(state[0],remaining)
                 tmpState = (nextState,remaining)
                 cost = 1
                 successors.append( ( tmpState, action, cost) )
