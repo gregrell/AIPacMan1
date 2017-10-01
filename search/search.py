@@ -96,6 +96,11 @@ class Node:
         self.f=None
         self.h=None
 
+    def __str__(self):
+        return str(self.state)
+    def __repr__(self):
+        return str(self.state)
+
 
 
     def setState(self,x):
@@ -114,6 +119,8 @@ class Node:
         self.path.append(x)
     def getCost(self):
         return self.cost
+    def setCost(self,cost):
+        self.cost=cost
     def getTotalCost(self):
         node=self
         total=0
@@ -280,8 +287,6 @@ def breadthFirstSearch(problem):
             #print "the successors are ", successors
 
             #print "the reversed successors are ", successors
-
-
             for x in successors:
                 if x[0] not in S:
                     TmpPath = path[:]
@@ -307,47 +312,109 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    from game import Directions
-    s = Directions.SOUTH
-    w = Directions.WEST
-    e = Directions.EAST
-    n = Directions.NORTH
-    start = Node(problem.getStartState(), 0, ['Begin'],0)
+
+    start = Node(problem.getStartState(), 0, 'Begin',0)
 
     #Uniform cost search algorithm implemented as in https://www.ics.uci.edu/~rickl/courses/cs-171/cs171-lecture-slides/cs-171-03-UninformedSearch.pdf
     #Priority Queue used from util.py
+    start = Node(problem.getStartState(), None, ['Begin'], 0)
 
+    def UCS(p, root):
+        S = []
+        Q = util.PriorityQueue()
+        S.append(root.getState())
+        Q.push(root,1)
+        while not Q.isEmpty():
+            #print "current heap is ", Q.heap
+
+            current = Q.pop()
+
+
+            #print "popped node was ", current, "with cost ", current.getCost()
+            #print "heap is ",Q.heap
+
+            #tmpList=Q.heap
+            #for tupple in tmpList:
+                #print "tupple is ",tupple[2]
+
+
+            path = current.getPath()
+            if p.isGoalState(current.getState()):
+                # print "goal state popped ", current.getState(), " its parent is ", current.getParent().getState()
+                return current
+
+            successors = p.getSuccessors(current.getState())
+            #successors = list(reversed(successors))
+            # print "the successors are ", successors
+
+            # print "the reversed successors are ", successors
+
+
+            for x in successors:
+                TmpPath = path[:]
+                TmpPath.append(x[1])
+                TmpNode = Node(x[0], current, TmpPath,current.getCost()+x[2])
+                if x[0] not in S:
+                    #print "pushing onto queue ",TmpNode.getState(), "with cost",TmpNode.getCost()
+                    S.append(TmpNode.getState())
+                    Q.push(TmpNode,TmpNode.getCost())
+                else:
+                    updateHeap(Q,TmpNode)
+
+    def updateHeap(priorityQueue,node):
+        heap=priorityQueue.heap
+        for tup in heap:
+            #print "comparing ",str(node.getState())," vs tup ",str(tup[2])
+            nodeString=str(node.getState())
+            tupString=str(tup[2])
+
+            nodeObject=tup[2]
+            if nodeString==tupString and node.getCost() < nodeObject.getCost():
+                nodeObject.setCost(node.getCost())
+                nodeObject.setParent(node.getParent())
+                nodeObject.setPath(node.getPath())
+                #print "Node ",node.getState()," with cost ", node.getCost()," found in tupple ",tup,
+                #print "the type of object obtained from tup[2] is ", type(nodeObject)
+                priorityQueue.update(nodeObject,node.getCost())
+                #print "updated heap is ", heap
+
+
+
+
+
+    node = UCS(problem, start)
+    path = node.getPath()
+    # path.reverse()
+    # print "the path is", path
+    return path[1:]
+"""
     def UCS(p,start):
         Q=util.PriorityQueue() #Use of priority queue
-        explored=[]
+        S=[]
         Q.push(start,start.getCost())
         while not Q.isEmpty():
             node=Q.pop()
             if p.isGoalState(node.getState()):
                 return node
-            explored.append(node.getState())
             successors=p.getSuccessors(node.getState())
             for x in successors:
                 child=Node(x[0],node,x[1],x[2])
-                if not explored.__contains__(child.getState()):
+                if child.getState() not in S:
                     Q.push(child,child.getTotalCost())
+                    S.append(child.getState())
 
-    goal=UCS(problem,start)
+    node=UCS(problem,start)
+    #print "Node is ", node.getState()," with path ", node.getTotalPath()
+    path = node.getTotalPath()
+    # path.reverse()
+    # print "the path is", path
+    return path[1:]
 
     #print "goal found at ",goal.getState(),"total cost ",goal.getTotalCost()," and path ",goal.getTotalPath()
+"""
 
-    directions = []
-    for x in goal.getTotalPath():
-        if x == 'East':
-            directions.append(e)
-        if x == 'West':
-            directions.append(w)
-        if x == 'North':
-            directions.append(n)
-        if x == 'South':
-            directions.append(s)
 
-    return directions
+
 
 
 def nullHeuristic(state, problem=None):
