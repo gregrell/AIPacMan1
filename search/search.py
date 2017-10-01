@@ -148,10 +148,8 @@ class Node:
     def setF(self,f):
         self.f=f
     def getF(self):
-        if not self.h==None:
-            return self.h+self.cost
-        else:
-            return self.f
+        return self.h+self.cost
+
     def setH(self,h):
         self.h=h
     def getH(self):
@@ -394,7 +392,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     start = Node(problem.getStartState(), None, ['Begin'], 0)
 
-    def UCS(p, root):
+    def astar(p, root):
         S = []
         Q = util.PriorityQueue()
         S.append(root.getState())
@@ -428,10 +426,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 TmpPath = path[:]
                 TmpPath.append(x[1])
                 TmpNode = Node(x[0], current, TmpPath, current.getCost() + x[2])
+                TmpNode.setH(heuristic(x[0],p))
                 if x[0] not in S:
-                    # print "pushing onto queue ",TmpNode.getState(), "with cost",TmpNode.getCost()
+                    #print "pushing onto queue ",TmpNode.getState(), "with cost",TmpNode.getCost()," its heuristic is ",TmpNode.getH()," the F value is ",TmpNode.getF()
                     S.append(TmpNode.getState())
-                    Q.push(TmpNode, TmpNode.getCost())
+                    Q.push(TmpNode, TmpNode.getF())
                 else:
                     updateHeap(Q, TmpNode)
 
@@ -452,7 +451,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 priorityQueue.update(nodeObject, node.getCost())
                 # print "updated heap is ", heap
 
-    node = UCS(problem, start)
+    node = astar(problem, start)
     path = node.getPath()
     # path.reverse()
     # print "the path is", path
