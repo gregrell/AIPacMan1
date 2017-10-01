@@ -164,11 +164,7 @@ class Node:
 
 
 def depthFirstSearch(problem):
-    from game import Directions
-    s = Directions.SOUTH
-    w = Directions.WEST
-    e = Directions.EAST
-    n = Directions.NORTH
+
     """
     Search the deepest nodes in the search tree first.
 
@@ -223,16 +219,8 @@ def depthFirstSearch(problem):
                     Q.push(TmpNode)
 
     node=DFS(problem,start)
-
-
-
     path=node.getPath()
-
     #path.reverse()
-
-
-
-
     #print "the path is", path
     return path[1:]
 
@@ -241,11 +229,9 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    from game import Directions
-    s = Directions.SOUTH
-    w = Directions.WEST
-    e = Directions.EAST
-    n = Directions.NORTH
+
+    """
+   
     start=Node(problem.getStartState(),None,['Begin'],0)
 
     #I implemented the non-recursive BFS algorithm that uses a set and a queue.
@@ -257,37 +243,60 @@ def breadthFirstSearch(problem):
         Q.push(root)
         while not Q.isEmpty():
             current=Q.pop()
+            S.append(current.getState())
             path=current.getPath()
             if p.isGoalState(current.getState()):
+                print "goal state found at ",current.getState()
                 return current
             for x in p.getSuccessors(current.getState()):
                 if x[0] not in S:
                     TmpPath=path[:]
                     TmpPath.append(x[1])
-                    S.append(x[0])
-                    Q.push(Node(x[0],current,TmpPath,0))
+                    TmpNode = Node(x[0], current, TmpPath, 0)
+                    Q.push(TmpNode)
 
-    target=BFS(problem,start)
+    node=BFS(problem,start)
+    path=node.getPath()
+    return path[1:]
+    """
+    print "Start:", problem.getStartState()
+    start=Node(problem.getStartState(),None,['Begin'],0)
+    def BFS(p,root):
+        S = []
+        Q = util.Queue()
+        S.append(root.getState())
+        Q.push(root)
+        while not Q.isEmpty():
+            current = Q.pop()
 
-    print "the path of target ",target.getPath()
+            #print "popped node was ", current.getState()
+            path = current.getPath()
+            if p.isGoalState(current.getState()):
+                #print "goal state popped ", current.getState(), " its parent is ", current.getParent().getState()
+                return current
 
-    #change the path into something the calling routine will actually be able to use
-    directions = []
-    for x in target.getPath():
-        if x == 'East':
-            directions.append(e)
-        if x == 'West':
-            directions.append(w)
-        if x == 'North':
-            directions.append(n)
-        if x == 'South':
-            directions.append(s)
+            successors=p.getSuccessors(current.getState())
+            successors=list(reversed(successors))
+            #print "the successors are ", successors
 
-    #print "directions given from this algorithm ", directions
+            #print "the reversed successors are ", successors
 
 
+            for x in successors:
+                if x[0] not in S:
+                    TmpPath = path[:]
+                    TmpPath.append(x[1])
+                    TmpNode = Node(x[0], current, TmpPath, 0)
+                    #print "pushing onto queue ",TmpNode.getState(), "when the discovered is ",S
+                    S.append(TmpNode.getState())
+                    Q.push(TmpNode)
 
-    return directions
+    node=BFS(problem,start)
+    path=node.getPath()
+    #path.reverse()
+    #print "the path is", path
+    return path[1:]
+
 
 
 
