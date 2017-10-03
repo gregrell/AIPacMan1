@@ -376,8 +376,42 @@ def cornersHeuristic(state, problem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+    start = problem.getStartState()
 
     "*** YOUR CODE HERE ***"
+    minDist=float('inf')
+    sumDist=0
+    chosen=None
+    for remCorner in state[1]:
+        xy1 = state[0]
+        xy2 = remCorner
+        #print "Distance from ",xy1, " to ",xy2, " is ", ((xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2) ** 0.5
+        manhattan = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])#manhattan
+        euclidian = ((xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2) ** 0.5#euclidian
+        #distance = min(manhattan,euclidian)
+        distance = manhattan
+        sumDist=sumDist+distance
+        if distance < minDist:
+            minDist = distance
+            chosen=xy2
+
+    dx1,dy1=state[0]
+    dx2,dy2=start
+
+    #print "dx1 ",dx1,"dy1 ",dy1," goalx ",goalx," goaly ",goaly
+    #cross = 1#abs(dx1*dy2-dx2*dy1)
+    #minDist+=cross*.001
+
+    if minDist==float('inf'):
+        minDist=0
+
+    #print "min distance is ",minDist
+    #time.sleep(1)
+    return minDist
+
+
+
+
     return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
