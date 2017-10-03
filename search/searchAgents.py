@@ -504,9 +504,48 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    position, foodGrid = state
+    problem.heuristicInfo['wallCount'] = problem.walls.count()
+    position, foodGrid = state[0],state[1]
     "*** YOUR CODE HERE ***"
-    return 0
+    walls=problem.walls
+    #print problem.walls
+    #print "food grid ", foodGrid.asList()
+    minDist=float('inf')
+    sumDist=0
+    nextFood = state[1].copy()
+    nextFood = nextFood.asList()
+    #print "next Food is ", nextFood.asList()
+    for remPellets in nextFood:
+        xy1 = state[0]
+        xy2 = remPellets
+        #print "Distance from ",xy1, " to ",xy2, " is ", ((xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2) ** 0.5
+        #print "Distance from ",xy1, " to ",xy2, " is ", abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+        manhattan = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])#manhattan
+        euclidian = ((xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2) ** 0.5#euclidian
+        #distance = min(manhattan,euclidian)
+        distance = manhattan
+        sumDist=sumDist+distance
+        if distance < minDist:
+            minDist = distance
+
+    dx1,dy1=state[0]
+
+    #print "dx1 ",dx1,"dy1 ",dy1," goalx ",goalx," goaly ",goaly
+    #cross = 1#abs(dx1*dy2-dx2*dy1)
+    #minDist+=cross*.001
+
+    if minDist==float('inf'):
+        minDist=0
+
+    #print "min distance is ",minDist
+    #time.sleep(1)
+    """
+    if len(foodGrid.asList())==0:
+        return 0
+    else:
+        return minDist"""
+    return minDist
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
