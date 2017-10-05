@@ -588,13 +588,27 @@ class ClosestDotSearchAgent(SearchAgent):
             xy2=surrounding
             x,y=surrounding[0],surrounding[1]
             manhattan = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])#manhattan
-            distance=manhattan
+            #distance=manhattan
+            distance=mazeDistance(xy1,xy2,gameState)
             if distance<minDist : #and not walls[x][y]
                 minDist=distance
                 minNode=surrounding
 
         print "min node is ", minNode
-        return ['East']
+        print "distance is ", distance
+        x1, y1 = xy1
+        x2, y2 = minNode
+        walls = gameState.getWalls()
+        assert not walls[x1][y1], 'point1 is a wall: ' + str(point1)
+        assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
+        prob = PositionSearchProblem(gameState, start=xy1, goal=minNode, warn=False, visualize=False)
+        result=search.bfs(prob)
+        print "result is ",result
+
+        return result
+
+
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """

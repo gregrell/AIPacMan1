@@ -268,7 +268,7 @@ def breadthFirstSearch(problem):
     path=node.getPath()
     return path[1:]
     """
-    print "Start:", problem.getStartState()
+    #print "Start:", problem.getStartState()
     start=Node(problem.getStartState(),None,['Begin'],0)
     def BFS(p,root):
         S = []
